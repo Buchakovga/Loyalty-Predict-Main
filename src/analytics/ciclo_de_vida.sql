@@ -71,11 +71,53 @@ select
     left join tb_penultima_tran b 
         on a.idCliente = b.idCliente
 
-)
+), freq_valor as (
+
+ select 
+        idcliente,
+        count(distinct substr(dtcriacao,0,11)) as qt_Freq_28_dias,
+        sum(case when QtdePontos > 0 then QtdePontos else 0 end) as qt_Pontos_28_dias
+        
+    from 
+        transacoes 
+
+    where 
+        dtcriacao < '{date}'
+        and dtcriacao > date('{date}' , '-28 day') 
+    group by idcliente
+    order by dtcriacao desc
+
+), segmentacao as (
+
 select 
-    date('{date}', '-1 day') as dtRef,
-    *
+    * ,
+    case 
+        when qt_Freq_28_dias <= 10 and qt_Pontos_28_dias >= 1500 then "12-HYPERS"
+        when qt_Freq_28_dias > 10 and qt_Pontos_28_dias >= 1500 then "22-EFICIENTES"
+        when qt_Freq_28_dias <= 10 and qt_Pontos_28_dias >= 750 then "11-INDECISO"
+        when qt_Freq_28_dias > 10 and qt_Pontos_28_dias >= 750 then "21-ESFORÇADO"        
+        when qt_Freq_28_dias < 5 then "00-LURKER"        
+        when qt_Freq_28_dias <= 10 then "01-PREGUIÇOSO"        
+        when qt_Freq_28_dias > 10 then "20-POTENCIAL" 
+    end as cluster        
+
 from 
-    tb_ciclo_vida_cluster 
+    freq_valor   
+
+) 
+
+select 
+    date('{date}' , '-1 day') as dtref,
+    a.* ,
+    b.qt_Freq_28_dias,
+    b.qt_Pontos_28_dias,
+    b.cluster
+
+from tb_ciclo_vida_cluster  a 
+
+left join segmentacao b 
+    on a.idCliente = b.idCliente
+
+
 
   

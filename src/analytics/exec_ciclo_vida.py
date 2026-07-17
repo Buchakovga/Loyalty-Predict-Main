@@ -23,7 +23,11 @@ engine_analitico = sqlalchemy.create_engine("sqlite:///../../loyalty-system/anal
 
 # %%
 
-dates = ['2024-05-01',
+dates = [
+        '2024-02-01',
+        '2024-03-01',
+        '2024-04-01',
+        '2024-05-01',
         '2024-06-01',
         '2024-07-01',
         '2024-08-01',
