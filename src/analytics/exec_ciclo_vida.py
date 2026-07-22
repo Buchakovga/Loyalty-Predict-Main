@@ -21,6 +21,7 @@ engine_app =  sqlalchemy.create_engine("sqlite:///../../loyalty-system/database.
 
 engine_analitico = sqlalchemy.create_engine("sqlite:///../../loyalty-system/analytics/database.db")
 
+
 # %%
 
 dates = [
