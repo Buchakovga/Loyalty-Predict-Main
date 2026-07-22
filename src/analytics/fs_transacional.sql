@@ -51,16 +51,45 @@ with pb_transacao as (
         pb_transacao
     group by IdCliente
 
-)
+), tb_agg_calculado as (
+    select 
+        *,
+        coalesce(1. * Qt_Transacao_Vida /  QtDias_Ativacao_Vida,0) as qtd_Trn_Dia_Vida,
+        coalesce(1. * Qt_Transacao_7Dias / QtDias_Ativacao_7Dias,0) as qtd_Trn_Dia_7dias,
+        coalesce(1. * Qt_Transacao_14Dias / QtDias_Ativacao_14Dias,0) as qtd_Trn_Dia_14dias,
+        coalesce(1. * Qt_Transacao_28Dias / QtDias_Ativacao_28Dias,0) as qtd_Trn_Dia_28dias,
+        coalesce(1. * Qt_Transacao_56Dias / QtDias_Ativacao_56Dias,0) as qtd_Trn_Dia_56dias,
+        coalesce(1. * QtDias_Ativacao_28Dias / 28,0) as Pct_Ativacao_Mau
+
+    from 
+        tb_agg_transacao
+), tb_horas_dias as (
+
 select 
-    Qt_Transacao_Vida /  QtDias_Ativacao_Vida as qtd_Trn_Dia_Vida2,
-    1. * Qt_Transacao_Vida /  QtDias_Ativacao_Vida as qtd_Trn_Dia_Vida,
-    1. * Qt_Transacao_7Dias / QtDias_Ativacao_7Dias as qtd_Trn_Dia_7dias,
-    1. * Qt_Transacao_14Dias / QtDias_Ativacao_14Dias as qtd_Trn_Dia_14dias,
-    1. * Qt_Transacao_28Dias / QtDias_Ativacao_28Dias as qtd_Trn_Dia_28dias,
-    1. * Qt_Transacao_56Dias / QtDias_Ativacao_56Dias as qtd_Trn_Dia_56dias
+    idCliente,
+    dtDia, 
+    ((24 * 60 ) / 60) * (max(julianday(DtCriacao)) - min(julianday(DtCriacao))) as Duracao
+    
+from 
+    pb_transacao
+group by idCliente,
+        dtDia
+), tb_hora_cliente as (
+
+select 
+    idCliente,
+    sum(duracao)  as qt_horas_vida,
+    sum(case when dtdia >= date('2025-10-01', '-7 day') then duracao else 0 end )  as qt_horas_vida_7dias,
+    sum(case when dtdia >= date('2025-10-01', '-14 day') then duracao else 0 end )  as qt_horas_vida_14dias,
+    sum(case when dtdia >= date('2025-10-01', '-28 day') then duracao else 0 end )  as qt_horas_vida_28dias,
+    sum(case when dtdia >= date('2025-10-01', '-56 day') then duracao else 0 end )  as qt_horas_vida_56dias
+
+from 
+    tb_horas_dias
+group by idCliente
+
+)
+select * from tb_hora_cliente 
 
 
- from 
-    tb_agg_transacao
 
