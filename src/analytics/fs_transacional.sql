@@ -181,8 +181,11 @@ from
     left join tb_share_prod d 
         on a.idCliente = d.idCliente
 ) 
+
 select 
     date('2025-10-01', '-1 day') as dtref,
+
     *
+
  from 
     tb_join_tudo
