@@ -10,3 +10,19 @@ group by dtref,
          cluster
 order by dtref 
 
+
+'adaga'
+'chapeu'
+'botas'
+'cajado'
+'espada'
+'armadura'
+'rpg'
+'fiel'
+'lovers'
+'streamelements'
+'chat'
+'churn_model'
+'food'
+'ponei',
+'present'
