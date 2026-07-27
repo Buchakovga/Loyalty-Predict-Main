@@ -184,8 +184,6 @@ from
 
 select 
     date('2025-10-01', '-1 day') as dtref,
-
     *
-
  from 
     tb_join_tudo
