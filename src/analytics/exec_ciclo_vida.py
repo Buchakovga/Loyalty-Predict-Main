@@ -5,6 +5,7 @@
 
 import pandas as pd
 import sqlalchemy 
+from datetime import datetime, timedelta
 
 
 # %%
@@ -24,28 +25,22 @@ engine_analitico = sqlalchemy.create_engine("sqlite:///../../loyalty-system/anal
 
 # %%
 
-dates = [
-        '2024-02-01',
-        '2024-03-01',
-        '2024-04-01',
-        '2024-05-01',
-        '2024-06-01',
-        '2024-07-01',
-        '2024-08-01',
-        '2024-09-01',
-        '2024-10-01',
-        '2024-11-01',
-        '2024-12-01',
-        '2025-01-01',
-        '2025-02-01',
-        '2025-03-01',
-        '2025-04-01',
-        '2025-05-01',
-        '2025-06-01',
-        '2025-07-01',
-        '2025-08-01',
-        '2025-09-01' ]
 
+def date_range(start, stop):
+    start = datetime.strptime(start, '%Y-%m-%d')
+    stop = datetime.strptime(stop, '%Y-%m-%d')
+
+    dates = []
+
+    while start <= stop:
+        dates.append(start.strftime('%Y-%m-%d'))
+        start += timedelta(days=1)
+
+    return dates
+
+dates = date_range('2024-09-01', '2025-10-01')
+
+# %% 
 
 for i in dates:
 
