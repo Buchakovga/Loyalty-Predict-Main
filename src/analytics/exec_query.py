@@ -45,10 +45,10 @@ def exec_query(table, db_origem, db_target, dt_start,dt_stop, monthly):
 
     for i in tqdm(dates):
 
-         with engine_analitico.connect() as con:
-             query_delete = f"delete from {table} where dtref = date('{i}','-1 day')"
-             con.execute(sqlalchemy.text(query_delete) )
-             con.commit()
+        with engine_analitico.connect() as con:
+            query_delete = f"delete from {table} where dtref = date('{i}','-1 day')"
+            con.execute(sqlalchemy.text(query_delete) )
+            con.commit()
 
         print(i)
         query_format = query.format(date=i)
