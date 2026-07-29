@@ -9,7 +9,7 @@ with ciclo_vida_atual as (
     from 
         ciclo_vida
     where 
-        dtref = date('2025-10-01', '-1 day')
+        dtref = date('{date}', '-1 day')
 ), ciclo_vida_d28 as (
 
     select 
@@ -18,7 +18,7 @@ with ciclo_vida_atual as (
     from 
         ciclo_vida
     where 
-        dtref = date('2025-10-01', '-29 day')
+        dtref = date('{date}', '-29 day')
 
 ), tb_share_ciclos as (
 select
@@ -34,7 +34,7 @@ select
      
 from 
     ciclo_vida
-where dtref < '2025-10-01'
+where dtref < '{date}'
 
 group by idCliente
 
@@ -78,7 +78,7 @@ group by Ciclo_Vida_Atual
 
 )
 select 
-     date('2025-10-01', '-1 day') as dtref,
+     date('{date}', '-1 day') as dtref,
      * 
 from 
     tb_join
