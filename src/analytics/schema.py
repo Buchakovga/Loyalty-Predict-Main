@@ -10,12 +10,12 @@ conn = sqlite3.connect(r"C:\Principal\Loyalty-Predict-Main\data\analytics\databa
 
 cursor = conn.cursor()
 
-#cursor.execute("PRAGMA table_info('fs_ciclo_de_vida')")
+cursor.execute("PRAGMA table_info('fs_education')")
 
-#for tabela in cursor.fetchall():
-#    print(tabela[0 1])
+for tabela in cursor.fetchall():
+    print(tabela[1])
 
-#conn.close()
+conn.close()
 
 # %%
 
