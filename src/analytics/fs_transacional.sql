@@ -13,8 +13,7 @@ with pb_transacao as (
     select 
         IdCliente,
 
-
-        max(julianday('{date}') - julianday(DtCriacao) ) as IdadeDias,
+        max(julianday(date('{date}', '-1 day')) - julianday(DtCriacao) ) as IdadeDias,
         count(distinct dtDia) as QtDias_Ativacao_Vida,
         count(distinct case when dtDia > date('{date}', '-7 day') then dtDia end ) as QtDias_Ativacao_7Dias,
         count(distinct case when dtDia > date('{date}', '-14 day') then dtDia end ) as QtDias_Ativacao_14Dias,
