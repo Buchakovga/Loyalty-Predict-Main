@@ -4,6 +4,11 @@
 # %%
 
 import pandas as pd
+
+pd.set_option('display.max_columns',None)
+pd.set_option('display.max_rows',None)
+
+
 import sqlalchemy 
 from sklearn import model_selection
 
@@ -41,6 +46,7 @@ from sklearn import model_selection
 X_train, X_test, y_train, y_test = model_selection.train_test_split(
     X, y, 
     test_size=0.2,
+    stratify=y,
     random_state=42,
 )
 
@@ -50,3 +56,29 @@ print(f"Base Teste: {y_test.shape[0]} Unid. | Tx. Target {100*y_test.mean():.2f}
 
 
 # %%
+
+# EXPLORAR - MISSING
+
+
+s_nas = X_train.isna().mean().T   
+
+s_nas = s_nas[s_nas>0]
+s_nas
+
+# %%
+
+cat_features = ['Ciclo_Vida_Atual','Ciclo_Vida_D28']
+
+num_features = list(set(features) - set(cat_features) )
+ 
+        
+df_train =  X_train.copy()
+df_train[target] = y_train.copy()
+
+df_train[num_features] = df_train[num_features].astype(float)
+
+bivariada = df_train.groupby(target)[num_features].median().T
+
+bivariada['ratio'] = (bivariada[1] + 0.001) / (bivariada[0] + 0.001)
+bivariada.sort_values(by='ratio',ascending=False)
+
