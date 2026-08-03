@@ -126,24 +126,6 @@ imput_1000 = imputation.ArbitraryNumberImputer(
 
 onehot = encoding.OneHotEncoder(variables=cat_features)
 
-# APLICANDO AS TRANSFORMAÇOES NO DATASET 
-X_Train_transfom = drop_feature.fit_transform(X_train)
-X_Train_transfom = imput_0.fit_transform(X_Train_transfom)
-X_Train_transfom = imput_new.fit_transform(X_Train_transfom)
-X_Train_transfom = imput_1000.fit_transform(X_Train_transfom)
-X_Train_transfom = onehot.fit_transform(X_Train_transfom)
-
-# %%
-
-X_Train_transfom.head()
-
-
-# %%
-
-# validação para ver se tem missing
-s_na = X_Train_transfom.isna().mean()
-s_na[s_na>0]
-
 
 # %%
 
@@ -153,26 +135,45 @@ from sklearn import tree
 from sklearn import ensemble 
 
 # model = tree.DecisionTreeClassifier(random_state=42, min_samples_leaf=50 )
-# model =ensemble.RandomForestClassifier(random_state=42, 
-#                                        n_estimators=150,
-#                                        n_jobs=-1,
-#                                        min_samples_leaf=60 )
 
-model =ensemble.AdaBoostClassifier(random_state=42, 
-                                   n_estimators=150,
-                                   learning_rate=0.01)
+model =ensemble.RandomForestClassifier(random_state=42, 
+                                        n_estimators=150,
+                                        n_jobs=-1,
+                                        min_samples_leaf=60 )
+
+# model =ensemble.AdaBoostClassifier(random_state=42, 
+#                                    n_estimators=150,
+#                                    learning_rate=0.01)
 
 
-model.fit(X_Train_transfom,y_train)
+# model.fit(X_Train_transfom,y_train)
 
 # %%
 
-# ASSESS
+# CRIANDO PIPELINE 
+from sklearn import pipeline
+
+model_pipeline = pipeline.Pipeline(steps=[
+    ('Remoção de Features', drop_feature),
+    ('Imputação de Zeros', imput_0),
+    ('Imputação de Não Unsuario', imput_new),
+    ('Imputação de 1000', imput_1000),
+    ('OneHotEnconding', onehot),
+    ('Algoritmo', model),
+])
+
+model_pipeline.fit(X_train,y_train)
+
+
+
+# %%S
+
+# ASSESS - MÉTRICAS
 
 from sklearn import metrics
 
-y_pred_train = model.predict(X_Train_transfom)
-y_prob_train = model.predict_proba(X_Train_transfom)
+y_pred_train = model_pipeline.predict(X_train)
+y_prob_train = model_pipeline.predict_proba(X_train)
 
 acc_train = metrics.accuracy_score(y_train, y_pred_train)
 auc_train = metrics.roc_auc_score(y_train,y_prob_train[:,1])
@@ -183,15 +184,8 @@ print("AUC Treino:", auc_train)
 # %%
 
 
-X_test_transfom = drop_feature.transform(X_test)
-X_test_transfom = imput_0.transform(X_test_transfom)
-X_test_transfom = imput_new.transform(X_test_transfom)
-X_test_transfom = imput_1000.transform(X_test_transfom)
-X_test_transfom = onehot.transform(X_test_transfom)
-
-y_pred_test = model.predict(X_test_transfom)
-y_prob_test = model.predict_proba(X_test_transfom)
-
+y_pred_test = model_pipeline.predict(X_test)
+y_prob_test = model_pipeline.predict_proba(X_test)
 
 acc_test = metrics.accuracy_score(y_test, y_pred_test)
 auc_test = metrics.roc_auc_score(y_test, y_prob_test[:,1])
@@ -203,15 +197,8 @@ print("AUC Teste:", auc_test)
 X_oot = df_oot[features]
 y_oot = df_oot[target]
 
-X_oot_transfom = drop_feature.transform(X_oot)
-X_oot_transfom = imput_0.transform(X_oot_transfom)
-X_oot_transfom = imput_new.transform(X_oot_transfom)
-X_oot_transfom = imput_1000.transform(X_oot_transfom)
-X_oot_transfom = onehot.transform(X_oot_transfom)
-
-y_pred_oot = model.predict(X_oot_transfom)
-y_prob_oot = model.predict_proba(X_oot_transfom)
-
+y_pred_oot = model_pipeline.predict(X_oot)
+y_prob_oot = model_pipeline.predict_proba(X_oot)
 
 acc_oot = metrics.accuracy_score(y_oot, y_pred_oot)
 auc_oot = metrics.roc_auc_score(y_oot, y_prob_oot[:,1])
@@ -223,9 +210,30 @@ print("AUC OOT:", auc_oot)
 # %%
 
 
-features_name = X_Train_transfom.columns.tolist()
+features_name = (model_pipeline[:-1].transform(X_train.head(1))
+                                   .columns
+                                   .tolist())
 
-features_importance = pd.Series(model.feature_importances_,index=features_name)
+features_importance = pd.Series(model_pipeline[-1].feature_importances_,index=features_name)
 features_importance.sort_values(ascending=False)
+
+# %%
+
+
+# ASSESS - PERSISTIR MODELO
+
+model_series = pd.Series(
+    {
+        "model": model_pipeline,
+        "features": X_train.columns.tolist(),
+        "auc_train": auc_train,
+        "auc_test": auc_test,
+        "auc_oot": auc_oot,
+    }    
+)
+
+model_series.to_pickle("model_fiel.pkl")
+
+
 
 # %%
