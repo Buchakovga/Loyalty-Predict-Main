@@ -1,1 +1,16 @@
+
+
 *.db
+*.csv
+
+
+mlruns
+mlartifacts
+
+
+*.pkl
+*.joblib
+
+ .env
+
+ 
