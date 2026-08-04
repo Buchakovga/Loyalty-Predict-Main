@@ -1,7 +1,9 @@
 
 
 
-create table abt_fiel as 
+drop table if exists abt_fiel;
+
+create table if not exists abt_fiel as 
 
 with tb_join as (
     select 
@@ -154,6 +156,8 @@ from
     left join fs_education d
         on a.idCliente = d.idCliente and 
            a.dtref = d.dtref 
+
+where c.dtref is not null 
 
 
 
