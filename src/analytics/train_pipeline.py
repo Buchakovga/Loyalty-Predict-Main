@@ -140,20 +140,18 @@ onehot = encoding.OneHotEncoder(variables=cat_features)
 ####
 #     MODEL
 ####
-#model = tree.DecisionTreeClassifier(random_state=42, min_samples_leaf=50 )
+#model = tree.DecisionTreeClassifier(random_state=42,  )
+
 # model =ensemble.AdaBoostClassifier(random_state=42, 
-#                                    n_estimators=150,
-#                                    learning_rate=0.01)
+#                                    )
 
 model =ensemble.RandomForestClassifier(random_state=42, 
-                                       n_estimators=150,
-                                       n_jobs=2,
-                                       min_samples_leaf=60 )
+                                       n_jobs=2,                                      )
 # CRIANDO PIPELINE 
 
 params = {
     "n_estimators": [100, 200, 400, 500, 1000],
-    "min_samples_leaf": [10, 20, 30, 50, 75,100],
+    "min_samples_leaf": [0.001, 0.01, 0.05, 0.1, 0.2, 0.5, 0.9, 0.99],
 }
 
 grid = model_selection.GridSearchCV(
@@ -163,7 +161,7 @@ grid = model_selection.GridSearchCV(
     scoring='roc_auc',    
     refit=True,
     verbose=3,
-    n_jobs=10,       
+    n_jobs=-1,       
 )
     
 with mlflow.start_run() as r:
@@ -253,6 +251,15 @@ features_importance.sort_values(ascending=False)
 
 
 # %%
+
+
+
+
+
+
+
+
+
 
 
 # ASSESS - PERSISTIR MODELO
