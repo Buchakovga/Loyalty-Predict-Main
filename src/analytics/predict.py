@@ -31,14 +31,3 @@ data
 
 
 # %%
-
-
-grupos = (data.groupby("dtref")
-            .agg({"predict":["mean","count"]})
-            .reset_index()
-            .sort_values("dtref",ascending=False))
-
-grupos
-
-
-# %%
