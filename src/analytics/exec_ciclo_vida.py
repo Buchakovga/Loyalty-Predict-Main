@@ -16,11 +16,11 @@ def import_query(path):
     return query
 
 
-query = import_query('ciclo_de_vida.sql')
+query = import_query('ciclo_vida.sql')
 
-engine_app =  sqlalchemy.create_engine("sqlite:///../../loyalty-system/database.db")
+engine_app =  sqlalchemy.create_engine("sqlite:///../../data/loyalty-system/database.db")
 
-engine_analitico = sqlalchemy.create_engine("sqlite:///../../loyalty-system/analytics/database.db")
+engine_analitico = sqlalchemy.create_engine("sqlite:///../../data/analytics/database.db")
 
 
 # %%
@@ -38,7 +38,7 @@ def date_range(start, stop):
 
     return dates
 
-dates = date_range('2024-09-01', '2025-10-01')
+dates = date_range('2024-03-01', '2025-10-01')
 
 # %% 
 
@@ -56,3 +56,5 @@ for i in dates:
 
 
 
+
+# %%

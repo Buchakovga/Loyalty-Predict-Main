@@ -4,6 +4,7 @@
 *.csv
 
 
+
 mlruns
 mlartifacts
 
@@ -11,6 +12,10 @@ mlartifacts
 *.pkl
 *.joblib
 
- .env
+.env
+.venv
 
- 
+
+__pycache__
+
+
