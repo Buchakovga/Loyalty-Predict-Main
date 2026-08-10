@@ -1,3 +1,4 @@
+
 select 
         a.dtref,
         a.idcliente,

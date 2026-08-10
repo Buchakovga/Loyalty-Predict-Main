@@ -29,7 +29,6 @@ steps = [
         "monthly": False   ,
         "mode": "append",
     },
-
     {
         "table":"fs_education",
         "db_origem":"education-platform",
@@ -57,8 +56,6 @@ steps = [
         "monthly": False   ,
         "mode": "replace",
     }
-
-
 
 ]
 

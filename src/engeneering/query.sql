@@ -13,4 +13,5 @@
 
 
 
-select * from score_fiel
+select * from fs_all
+
