@@ -22,12 +22,19 @@ model = mlflow.sklearn.load_model(f"models:/model_fiel/{last_version}")
 
 # %%
 
-
-data = pd.read_sql("select * from abt_fiel", con )
+data = pd.read_sql("select * from fs_all", con )
 predict = model.predict_proba(data[model.feature_names_in_])[:,1]
-data["predict"] = predict 
-data 
+data["predictfiel"] = predict 
 
 
+data = data[['dtref','IdCliente','predictfiel']]
+
+
+
+
+
+# %%
+
+data.to_sql('score_fiel', con,index=False, if_exists="replace")
 
 # %%

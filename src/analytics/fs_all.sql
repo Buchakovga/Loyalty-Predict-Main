@@ -103,7 +103,6 @@ select
         c.Qt_Dias_ult_atividade 
 
 from 
-
     fs_transacional a
         
     left join fs_ciclo_de_vida b

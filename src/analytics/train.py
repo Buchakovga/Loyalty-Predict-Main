@@ -8,6 +8,10 @@ from feature_engine import selection
 from feature_engine import imputation
 from feature_engine import encoding
 from sklearn import model_selection
+from sklearn import tree
+from sklearn import ensemble 
+from sklearn import metrics
+
 
 pd.set_option('display.max_columns',None)
 pd.set_option('display.max_rows',None)
@@ -149,8 +153,7 @@ s_na[s_na>0]
 
 # MODEL 
 
-from sklearn import tree
-from sklearn import ensemble 
+
 
 # model = tree.DecisionTreeClassifier(random_state=42, min_samples_leaf=50 )
 # model =ensemble.RandomForestClassifier(random_state=42, 
@@ -169,7 +172,6 @@ model.fit(X_Train_transfom,y_train)
 
 # ASSESS
 
-from sklearn import metrics
 
 y_pred_train = model.predict(X_Train_transfom)
 y_prob_train = model.predict_proba(X_Train_transfom)
