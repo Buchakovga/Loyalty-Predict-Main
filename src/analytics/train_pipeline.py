@@ -242,12 +242,12 @@ with mlflow.start_run() as r:
 
 # %%
 
-features_name = (model_pipeline[:-1].transform(X_train.head(1))
-                                .columns
-                                .tolist())
+# features_name = (model_pipeline[:-1].transform(X_train.head(1))
+#                                 .columns
+#                                 .tolist())
 
-features_importance = pd.Series(model_pipeline[-1].feature_importances_,index=features_name)
-features_importance.sort_values(ascending=False)
+# features_importance = pd.Series(model_pipeline[-1].feature_importances_,index=features_name)
+# features_importance.sort_values(ascending=False)
 
 
 # %%
