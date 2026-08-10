@@ -14,15 +14,10 @@ from tqdm import tqdm
 
 # %%
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-ANALYTICS_DIR = Path(__file__).resolve().parent
-
 
 def import_query(path):
-    query_path = ANALYTICS_DIR / path
-    if not query_path.exists():
-        raise FileNotFoundError(f"SQL file not found: {query_path}")
-    with open(query_path) as open_file:
+    
+    with open(path) as open_file:
         query = open_file.read()
     return query
 
