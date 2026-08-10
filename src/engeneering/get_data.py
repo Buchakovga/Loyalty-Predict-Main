@@ -18,8 +18,6 @@ kaggle_token = os.environ.get('KAGGLE_API_TOKEN')
 if not kaggle_token:
     raise RuntimeError(f'KAGGLE_API_TOKEN not found in {env_path}')
 
-print(kaggle_token)
-
 
 # %%
 
